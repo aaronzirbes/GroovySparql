@@ -1,10 +1,12 @@
+apply plugin:"java"
 apply plugin:"groovy"
 //apply plugin:"eclipse"
 apply plugin:"maven"
 apply plugin: 'signing'
 //apply plugin: 'codenarc'
+//apply plugin: 'maven-publish'
 
-group = 'com.github.albaker'
+group = 'com.github.DilvanLab'
 version = '0.9.0'
 
 repositories {
@@ -13,29 +15,34 @@ repositories {
 }
 
 dependencies {
-	groovy group: 'org.codehaus.groovy', name: 'groovy', version: '2.3.8'
-	compile 'org.apache.jena:jena:2.12.0'
-	compile 'org.apache.jena:jena-arq:2.12.0'
-	compile 'com.github.jsonld-java:jsonld-java:0.5.0'
+	//groovy group: 'org.codehaus.groovy', name: 'groovy', version: '2.3.8'
+	compile 'org.codehaus.groovy:groovy-all:2.4.3'
+	compile 'org.apache.jena:jena:3.0.1'
+	compile 'org.apache.jena:jena-arq:3.0.1'
+	//compile 'org.apache.jena:jena:2.12.0'
+	//compile 'org.apache.jena:jena-arq:2.12.0' 083
+	compile 'com.github.jsonld-java:jsonld-java:0.8.3'
 	// this can be replaced after jena 2.12.2 or later
 	// it was partially merged in 2.12.1, but not fully so it's incompatible
 	// with 2.12.0
-    compile 'org.apache.jena:jena-csv:1.0.0'
-	compile 'org.codehaus.gpars:gpars:1.1.0'
+	//compile 'org.apache.jena:jena-csv:1.0.0'
+	compile 'org.apache.jena:jena-csv:3.0.1'
+	compile 'org.codehaus.gpars:gpars:1.2.1'//1.0'
 
 	testCompile group: 'junit', name: 'junit', version: '4.8.2'
 }
 
-compileGroovy{ 
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
-	options.bootClasspath = "/usr/lib/jvm/jdk1.6.0_31/jre/lib/rt.jar"
-}
+//compileGroovy{
+//	sourceCompatibility = 1.6
+//	targetCompatibility = 1.6
+//	options.bootClasspath = "/usr/lib/jvm/jdk1.6.0_31/jre/lib/rt.jar"
+//}
 
 task sourceJar(type: Jar) {
 	description 'An archive of the source code for Maven Central'
 	classifier 'sources'
 	from sourceSets.main.groovy
+//    from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -53,50 +60,76 @@ signing {
 	required { gradle.taskGraph.hasTask(uploadArchives) }
 }
 
-configure(install.repositories.mavenInstaller) {
-	pom.project {
-		version '0.8.1'
-		artifactId 'GroovySparql'
-		groupId 'com.github.albaker'
-	}
-}
+//configure(install.repositories.mavenInstaller) {
+//	pom.project {
+//		version '0.9.0'
+//		artifactId 'GroovySparql'
+//		groupId 'com.github.DilvanLab'
+//	}
+//}
+
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            groupId 'com.github.albaker'
+//            artifactId 'GroovySparql'
+//            version '0.9.1'
+//
+//            from components.java
+//        }
+//    }
+//}
+//publishing {
+//    repositories {
+//        maven {
+//            // change to point to your repo, e.g. http://my.org/repo
+//            url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+//        }
+//    }
+//}
 
 uploadArchives {
 	repositories {
 		mavenDeployer {
-			beforeDeployment { MavenDeployment deployment -> signPom(deployment) }
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
 			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-			  authentication(userName: sonatypeUsername, password: sonatypePassword)
+				authentication(userName: ossrhUsername, password: ossrhPassword)
+			}
+
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: ossrhUsername, password: ossrhPassword)
 			}
 
 			pom.project {
-			   name 'GroovySparql'
-			   packaging 'jar'
-			   description 'Groovy SPARQL provides an easy to use Groovy API for W3C standard SPARQL endpoints'
-			   url 'https://github.com/AlBaker/GroovySparql'
+				name 'GroovySparql'
+				packaging 'jar'
+				description 'Groovy SPARQL provides an easy to use Groovy API for W3C standard SPARQL endpoints'
+				url 'https://github.com/DilvanLab/GroovySparql'
 
-			   scm {
-				   url 'scm:git://github.com/AlBaker/GroovySparql.git'
-				   connection 'scm:git://github.com/AlBaker/GroovySparql.git'
-				   developerConnection 'scm:git://github.com/AlBaker/GroovySparql.git'
-			   }
+				scm {
+					url 'scm:git://github.com/DilvanLab/GroovySparql.git'
+					connection 'scm:git://github.com/DilvanLab/GroovySparql.git'
+					developerConnection 'scm:git://github.com/DilvanLab/GroovySparql.git'
+				}
 
-			   licenses {
-				   license {
-					   name 'The Apache Software License, Version 2.0'
-					   url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-					   distribution 'repo'
-				   }
-			   }
+				licenses {
+					license {
+						name 'The Apache Software License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						distribution 'repo'
+					}
+				}
 
-			   developers {
-				   developer {
-					   id 'albaker'
-					   name 'Al Baker'
-				   }
-			   }
-		   }
+				developers {
+					developer {
+						id 'dilvan1'
+						name 'Dilvan Moreira'
+						email 'dilvan@gmail.com'
+					}
+				}
+			}
 		}
 	}
 }
+

@@ -14,10 +14,10 @@
  */
 package groovy.sparql
 
-import com.hp.hpl.jena.rdf.model.Literal
-import com.hp.hpl.jena.rdf.model.Model
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Literal
+import org.apache.jena.rdf.model.Model
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
 
 
 import groovy.util.BuilderSupport;
@@ -291,7 +291,7 @@ class RDFBuilder extends BuilderSupport {
 		def object = input[2]
 		
 		if (!subject || !property || !object) {
-			return null
+			return //null
 		}
 		
 		model.add(model.createStatement(

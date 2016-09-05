@@ -1,0 +1,33 @@
+# Ignore temporary Emacs files
+*~
+.class*
+
+/bin
+
+#Ignore Eclipse directories
+.settings
+#.project
+#.classpath
+
+#Ignore Intellij files
+*.iml
+.idea
+
+# Exclude build directory
+target
+build
+out
+.gradle
+gradle
+gradle.properties
+
+# Ignore Blazegraph
+bigdata.jnl
+blazegraph.jar
+
+*.DS_Store
+
+*.log
+*.log.lck
+
+catalog-v001.xml
