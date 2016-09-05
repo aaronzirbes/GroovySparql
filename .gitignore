@@ -6,8 +6,8 @@
 
 #Ignore Eclipse directories
 .settings
-#.project
-#.classpath
+.project
+.classpath
 
 #Ignore Intellij files
 *.iml
