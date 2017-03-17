@@ -1,3 +1,5 @@
+This fork just recompiles Groovy Sparql with more up to date libraries. The original README:
+
 GroovySPARQL
 ============
 
